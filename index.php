@@ -182,17 +182,60 @@ This is a system generated mail. Do not reply.
     
     if($_GET['allSub'] == 1) {
         
+        $status = 0;
+        $ids = Array();
+        $slots = Array();
+        $scodes = Array();
+        
+        $query = "SELECT * FROM `faculty_slot` WHERE `tid` = '".mysqli_real_escape_string($link, $_GET['tid'])."'";
+        
+        if($result = mysqli_query($link, $query)) {
+            while($row = mysqli_fetch_array($result)) {
+                
+                array_push($ids, $row['id']);
+                array_push($slots, $row['slot']);
+                array_push($scodes, $row['scode']);
+                
+            }
+        } 
+        
+        if(sizeof($slots) > 0) {
+            $status = 1;
+        } else {
+            $status = 0;
+        }
+        
+        for($i = 0;$i < sizeof($slots) - 1;$i++) {
+            for($j = 0;$j<sizeof($slots) - i - 1;$j++) {
+                if($slots[$j] > $slots[$j+1]) {
+                    $temp = $slots[$j];
+                    $slots[$j] = $slots[$j+1];
+                    $slots[$j+1] = $temp;
+                    $temp1 = $sids[$j];
+                    $sids[$j] = $sids[$j+1];
+                    $sids[$j+1] = $temp1;
+                    $temp2 = $ids[$j];
+                    $ids[$j] = $ids[$j+1];
+                    $ids[$j+1] = $temp2;
+                }
+            }
+        }
+        
+        echo json_encode(Array("slots" => $slots, "scodes" => $scodes, "ids" => $ids,  "status" => $status));
+        
     } else if($_GET['allSub'] == 2) {
         
         $status = 0;
         $slots = Array();
         $sids = Array();
+        $ids = Array();
         
         $query = "SELECT * FROM `student_slot` WHERE `reg` = '".mysqli_real_escape_string($link, $_GET['reg'])."'";
         
         if($result = mysqli_query($link, $query)) {
             while($row = mysqli_fetch_array($result)) {
                 
+                array_push($ids, $row['id']);
                 array_push($slots, $row['slot']);
                 array_push($sids, $row['sid']);
                 
@@ -214,11 +257,14 @@ This is a system generated mail. Do not reply.
                     $temp1 = $sids[$j];
                     $sids[$j] = $sids[$j+1];
                     $sids[$j+1] = $temp1;
+                    $temp2 = $ids[$j];
+                    $ids[$j] = $ids[$j+1];
+                    $ids[$j+1] = $temp2;
                 }
             }
         }
         
-        echo json_encode(Array("slots" => $slots, "sids" => $sids, "status" => $status));
+        echo json_encode(Array("slots" => $slots, "sids" => $sids, "ids" => $ids, "status" => $status));
         
     }
 
