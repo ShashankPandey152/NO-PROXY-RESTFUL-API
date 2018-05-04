@@ -1,22 +1,17 @@
 <?php
-
     $link = mysqli_connect("shareddb-g.hosting.stackcp.net","interconnect-3237e9c9","password98@","interconnect-3237e9c9");
-
     if($_GET["log"] == 1) {
      
         $signup = 0;
         
         if($_GET["sign"] == 1) {
-
             $query = "SELECT * FROM `faculty` WHERE `tid` = '".mysqli_real_escape_string($link,$_GET['tid'])."' OR `email` = '".mysqli_real_escape_string($link, $_GET['email'])."'";
-
             if(mysqli_num_rows(mysqli_query($link,$query))>0) {
                 $signup = 0;
             }else {
                 $query = "INSERT INTO `faculty` (`tid`,`name`,`email`,`password`) 
                 VALUES('".mysqli_real_escape_string($link,$_GET["tid"])."','".mysqli_real_escape_string($link,$_GET["name"])."',
                 '".mysqli_real_escape_string($link,$_GET["email"])."','".mysqli_real_escape_string($link,hash('sha512',$_GET['password']))."')";
-
                 if(mysqli_query($link,$query)) {
                     $signup = 1;
                 } 
@@ -24,22 +19,17 @@
             }
             
             echo json_encode(Array("signup" => $signup));
-
         } else if($_GET["sign"] = 2) {
-
             $query = "SELECT * FROM `student` WHERE reg = '".mysqli_real_escape_string($link,$_GET["reg"])."' OR `email` = '".mysqli_real_escape_string($link, $_GET['email'])."'";
-
             if(mysqli_num_rows(mysqli_query($link,$query))>0) {
                 $signup = 0;
             } else {
                 $query = "INSERT INTO `student` (`reg`,`name`,`email`,`password`) 
                 VALUES('".mysqli_real_escape_string($link,$_GET["reg"])."','".mysqli_real_escape_string($link,$_GET["name"])."',
                 '".mysqli_real_escape_string($link,$_GET["email"])."','".mysqli_real_escape_string($link,hash('sha512',$_GET["password"]))."')";
-
                 if(mysqli_query($link,$query)) {
                     $signup = 1;
                 } 
-
             }
             
             echo json_encode(Array("signup" => $signup));
@@ -82,14 +72,14 @@
                 
         }
     }
-
-
     if($_GET["fac"] == 1) {
-
-        $query = "SELECT * FROM `faculty_slot` WHERE `tid` ='".mysqli_real_escape_string($link,$_GET["tid"])."' AND `scode` = '".mysqli_real_escape_string($link,$_GE["scode"])."'";
-
+        
+        $status = 0;
+        
+        $query = "SELECT * FROM `faculty_slot` WHERE `tid` ='".mysqli_real_escape_string($link,$_GET["tid"])."' AND `scode` = '".mysqli_real_escape_string($link,$_GET["scode"])."'";
+        
         $result = mysqli_query($link, $query);
-
+        
         if(mysqli_num_rows($result) > 0) {
             $status = 0;
         } else {
@@ -97,35 +87,30 @@
             VALUES('".mysqli_real_escape_string($link,$_GET["tid"])."','".mysqli_real_escape_string($link,$_GET["scode"])."',
             '".mysqli_real_escape_string($link,$_GET["batch"])."','".mysqli_real_escape_string($link,$_GET["slot"])."',
             '".mysqli_real_escape_string($link,$_GET["do"])."')";
-
-            if(mysqli_query($link.$query)) {
+            if(mysqli_query($link, $query)) {
                 $status = 1;
             }
         }
-
-        echo json_encode(Array("tid" => tid, "scode" => scode));
+        echo json_encode(Array("status" => $status));
     }
-
     if($_GET["fac"] == 2) {
-
+        
+        $status = 0;
+        
         $query = "SELECT * FROM `student_slot` WHERE `reg` = '".mysqli_real_escape_string($link,$_GET["reg"])."' AND `sid` = 
         '".mysqli_real_escape_string($link,$_GET["sid"])."'";
-
+        
         $result = mysqli_query($link, $query);
-
+        
         if(mysqli_num_rows($result) > 0) {
             $status = 0;
         } else {
-            $query = "INSERT INTO `student_slot(`reg`,`sid`,`tid`) 
-            VALUES('".mysqli_real_escape_string($link,$_GET["reg"])."','".mysqli_real_escape_string($link,$_GET["sid"])."',
-            '".mysqli_real_escape_string($link,$_GET["tid"])."')";
-
+            $query = "INSERT INTO `student_slot`(`reg`, `sid`, `tid`) VALUES('".mysqli_real_escape_string($link, $_GET['reg'])."', '".mysqli_real_escape_string($link, $_GET['sid'])."', '".mysqli_real_escape_string($link, $_GET['tid'])."')";
+            
             if(mysqli_query($link,$query)) {
                 $status = 1;
             }
         }
-
-        echo json_encode(Array("reg" => reg, "sid" => sid));
+        echo json_encode(Array("status" => $status));
     }
-
 ?>
