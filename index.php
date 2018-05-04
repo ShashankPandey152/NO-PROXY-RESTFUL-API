@@ -88,9 +88,9 @@
 
         $query = "SELECT * FROM `faculty_slot` WHERE `tid` ='".mysqli_real_escape_string($link,$_GET["tid"])."' AND `scode` = '".mysqli_real_escape_string($link,$_GE["scode"])."'";
 
-        $row = mysqli_fetch_array(mysqli_query($link,$query));
+        $result = mysqli_query($link, $query);
 
-        if($_GET["tid"] == $row["tid"] && $_GET["scode"] == $row["scode"]) {
+        if(mysqli_num_rows($result) > 0) {
             $status = 0;
         } else {
             $query = "INSERT INTO `faculty_slot` (`tid`,`scode`,`batch`,`slot`,`do`)
@@ -111,9 +111,9 @@
         $query = "SELECT * FROM `student_slot` WHERE `reg` = '".mysqli_real_escape_string($link,$_GET["reg"])."' AND `sid` = 
         '".mysqli_real_escape_string($link,$_GET["sid"])."'";
 
-        $row = mysqli_fetch_array(mysqli_query($link,$query));
+        $result = mysqli_query($link, $query);
 
-        if($_GET["reg"] == $row["reg"] && $_GET["sid"] == $row["sid"]) {
+        if(mysqli_num_rows($result) > 0) {
             $status = 0;
         } else {
             $query = "INSERT INTO `student_slot(`reg`,`sid`,`tid`) 
