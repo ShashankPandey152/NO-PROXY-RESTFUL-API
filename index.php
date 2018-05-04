@@ -72,6 +72,69 @@
                 
         }
     }
+
+    if($_GET['forgot'] == 1) {
+        
+        $status = 0;
+        
+        $query = "SELECT `id` FROM `faculty` WHERE `email` = '".mysqli_real_escape_string($link, $_GET['email'])."'";
+        
+        if(mysqli_num_rows(mysqli_query($link, $query)) > 0) {
+            
+            $to = $_GET['email'];
+            $subject = "Reset password";
+            $message = '
+
+Please click this link to reset your password:
+http://jncpasighat-com.stackstaging.com/vastuKosh/verify.php?email='.$mail.'
+
+This is a system generated mail. Do not reply. 
+            ';
+            $headers = 'From:noreply@noproxy.com' . "\r\n"; 
+            if(mail($to, $subject, $message, $headers)) {
+                $status = 1;
+            } else {
+                $status = 0;
+            }
+            
+        } else {
+            $status = 2;
+        }
+        
+        echo json_encode(Array("status" => $status));
+        
+    } else if($_GET['forgot'] == 2) {
+        
+        $status = 0;
+        
+        $query = "SELECT `id` FROM `student` WHERE `email` = '".mysqli_real_escape_string($link, $_GET['email'])."'";
+        
+        if(mysqli_num_rows(mysqli_query($link, $query)) > 0) {
+            
+            $to = $_GET['email'];
+            $subject = "Reset password";
+            $message = '
+
+Please click this link to reset your password:
+http://jncpasighat-com.stackstaging.com/vastuKosh/verify.php?email='.$mail.'
+
+This is a system generated mail. Do not reply. 
+            ';
+            $headers = 'From:noreply@noproxy.com' . "\r\n"; 
+            if(mail($to, $subject, $message, $headers)) {
+                $status = 1;
+            } else {
+                $status = 0;
+            }
+            
+        } else {
+            $status = 2;
+        }
+        
+        echo json_encode(Array("status" => $status));
+        
+    }
+
     if($_GET["fac"] == 1) {
         
         $status = 0;
@@ -92,8 +155,7 @@
             }
         }
         echo json_encode(Array("status" => $status));
-    }
-    if($_GET["fac"] == 2) {
+    } else if($_GET["fac"] == 2) {
         
         $status = 0;
         
