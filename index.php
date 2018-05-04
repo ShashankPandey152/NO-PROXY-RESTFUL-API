@@ -14,7 +14,9 @@
                 '".mysqli_real_escape_string($link,$_GET["email"])."','".mysqli_real_escape_string($link,hash('sha512',$_GET['password']))."')";
                 if(mysqli_query($link,$query)) {
                     $signup = 1;
-                } 
+                } else {
+                    $signup = 2;
+                }
                 
             }
             
@@ -29,7 +31,9 @@
                 '".mysqli_real_escape_string($link,$_GET["email"])."','".mysqli_real_escape_string($link,hash('sha512',$_GET["password"]))."')";
                 if(mysqli_query($link,$query)) {
                     $signup = 1;
-                } 
+                } else {
+                    $signup = 2;
+                }
             }
             
             echo json_encode(Array("signup" => $signup));
@@ -167,7 +171,7 @@ This is a system generated mail. Do not reply.
         if(mysqli_num_rows($result) > 0) {
             $status = 0;
         } else {
-            $query = "INSERT INTO `student_slot`(`reg`, `sid`, `tid`) VALUES('".mysqli_real_escape_string($link, $_GET['reg'])."', '".mysqli_real_escape_string($link, $_GET['sid'])."', '".mysqli_real_escape_string($link, $_GET['tid'])."')";
+            $query = "INSERT INTO `student_slot`(`reg`, `slot`, `sid`, `tid`) VALUES('".mysqli_real_escape_string($link, $_GET['reg'])."', '".mysqli_real_escape_string($link, $_GET['slot'])."', '".mysqli_real_escape_string($link, $_GET['sid'])."', '".mysqli_real_escape_string($link, $_GET['tid'])."')";
             
             if(mysqli_query($link,$query)) {
                 $status = 1;
@@ -175,4 +179,47 @@ This is a system generated mail. Do not reply.
         }
         echo json_encode(Array("status" => $status));
     }
+    
+    if($_GET['allSub'] == 1) {
+        
+    } else if($_GET['allSub'] == 2) {
+        
+        $status = 0;
+        $slots = Array();
+        $sids = Array();
+        
+        $query = "SELECT * FROM `student_slot` WHERE `reg` = '".mysqli_real_escape_string($link, $_GET['reg'])."'";
+        
+        if($result = mysqli_query($link, $query)) {
+            while($row = mysqli_fetch_array($result)) {
+                
+                array_push($slots, $row['slot']);
+                array_push($sids, $row['sid']);
+                
+            }
+        } 
+        
+        if(sizeof($slots) > 0) {
+            $status = 1;
+        } else {
+            $status = 0;
+        }
+        
+        for($i = 0;$i < sizeof($slots) - 1;$i++) {
+            for($j = 0;$j<sizeof($slots) - i - 1;$j++) {
+                if($slots[$j] > $slots[$j+1]) {
+                    $temp = $slots[$j];
+                    $slots[$j] = $slots[$j+1];
+                    $slots[$j+1] = $temp;
+                    $temp1 = $sids[$j];
+                    $sids[$j] = $sids[$j+1];
+                    $sids[$j+1] = $temp1;
+                }
+            }
+        }
+        
+        echo json_encode(Array("slots" => $slots, "sids" => $sids, "status" => $status));
+        
+    }
+
 ?>
