@@ -1,5 +1,21 @@
 <?php
+
     $link = mysqli_connect("shareddb-g.hosting.stackcp.net","interconnect-3237e9c9","password98@","interconnect-3237e9c9");
+    
+    $now = date('H:i:s');
+    $query = "SELECT `time`, `id` FROM `student_slot`";
+    if($result = mysqli_query($link, $query)) {
+        while($row = mysqli_fetch_array($result)) {
+            
+            $time = date('H:i:s', strtotime($row['time']));
+            if(strtotime($now) - strtotime($time) > 10) {
+                $query = "UPDATE `student_slot` SET `otp` = '' WHERE `id` = '".$row['id']."'";
+                mysqli_query($link, $query);
+            } 
+            
+        }
+    }
+
     if($_GET["log"] == 1) {
      
         $signup = 0;
@@ -265,6 +281,21 @@ This is a system generated mail. Do not reply.
         }
         
         echo json_encode(Array("slots" => $slots, "sids" => $sids, "ids" => $ids, "status" => $status));
+        
+    }
+
+    if($_GET['generate'] == 1) {
+        
+        $status = 0;
+        $otp = rand(111111,999999);
+        
+        $query = "UPDATE `student_slot` SET `otp` = '".$otp."' WHERE `slot` = '".mysqli_real_escape_string($link, $_GET['slot'])."' AND `sid` = '".mysqli_real_escape_string($link, $_GET['sid'])."' AND `tid` = '".mysqli_real_escape_string($link, $_GET['tid'])."'";
+        
+        if(mysqli_query($link, $query)) {
+            $status = 1;
+        } else {
+            $status = 2;
+        }
         
     }
 
