@@ -313,4 +313,23 @@ This is a system generated mail. Do not reply.
         
     }
 
+    if($_GET['getAttendance'] == 1) {
+        
+        $status = 0;
+        $regs = Array();
+        
+        $query = "SELECT `reg` FROM `attendance` WHERE `scode` = '".mysqli_real_escape_string($link, $_GET['scode'])."' AND `tid` = '".mysqli_real_escape_string($link, $_GET['tid'])."'";
+        
+        if($result = mysqli_query($link, $query)) {
+            while($row = mysqli_fetch_array($result)) {
+                
+                array_push($regs, $row['reg']);
+                
+            }
+        }
+        
+        echo json_encode(Array("regs" => $regs));
+        
+    }
+
 ?>
