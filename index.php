@@ -303,9 +303,10 @@ This is a system generated mail. Do not reply.
         
         $status = 0; 
         
-        $query = "SELECT `otp`, `tid` FROM `student_slot` WHERE `reg` = '".mysqli_real_escape_string($link, $_GET['reg'])."' AND `scode` = '".mysqli_real_escape_string($link, $_GET['scode'])."'";
+        $query = "SELECT `otp`, `tid` FROM `student_slot` WHERE `reg` = '".mysqli_real_escape_string($link, $_GET['reg'])."' AND `sid` = '".mysqli_real_escape_string($link, $_GET['scode'])."'";
         
         $row = mysqli_fetch_array(mysqli_query($link, $query));
+        
         
         if($row['otp'] == "") {
             $status = 2;
@@ -315,6 +316,8 @@ This is a system generated mail. Do not reply.
             if(mysqli_query($link, $query)) {
                 $status = 1;
             }   
+        } else if($_GET['otp'] != $row['otp']) {
+            $status = 3;
         }
         
         echo json_encode(Array("status" => $status));
