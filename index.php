@@ -295,7 +295,7 @@ This is a system generated mail. Do not reply.
             $status = 1;
         } 
         
-        echo json_encode(Array("status" => $status));
+        echo json_encode(Array("status" => $status, "otp" => $otp));
         
     }
 
