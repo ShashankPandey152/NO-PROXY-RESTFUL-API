@@ -8,7 +8,7 @@
         while($row = mysqli_fetch_array($result)) {
             
             $time = date('H:i:s', strtotime($row['time']));
-            if(strtotime($now) - strtotime($time) > 10) {
+            if(strtotime($now) - strtotime($time) > 15) {
                 $query = "UPDATE `student_slot` SET `otp` = '' WHERE `id` = '".$row['id']."'";
                 mysqli_query($link, $query);
             } 
@@ -164,7 +164,7 @@ This is a system generated mail. Do not reply.
         $result = mysqli_query($link, $query);
         
         if(mysqli_num_rows($result) > 0) {
-            $status = 0;
+            $status = 2;
         } else {
             $query = "INSERT INTO `faculty_slot` (`tid`,`scode`,`batch`,`slot`,`do`)
             VALUES('".mysqli_real_escape_string($link,$_GET["tid"])."','".mysqli_real_escape_string($link,$_GET["scode"])."',
@@ -185,7 +185,7 @@ This is a system generated mail. Do not reply.
         $result = mysqli_query($link, $query);
         
         if(mysqli_num_rows($result) > 0) {
-            $status = 0;
+            $status = 2;
         } else {
             $query = "INSERT INTO `student_slot`(`reg`, `slot`, `sid`, `tid`) VALUES('".mysqli_real_escape_string($link, $_GET['reg'])."', '".mysqli_real_escape_string($link, $_GET['slot'])."', '".mysqli_real_escape_string($link, $_GET['sid'])."', '".mysqli_real_escape_string($link, $_GET['tid'])."')";
             
@@ -293,9 +293,23 @@ This is a system generated mail. Do not reply.
         
         if(mysqli_query($link, $query)) {
             $status = 1;
-        } else {
-            $status = 2;
+        } 
+        
+        echo json_encode(Array("status" => $status));
+        
+    }
+
+    if($_GET['attendance'] == 1) {
+        
+        $status = 0; 
+        
+        $query = "INSERT INTO `attendance`(`reg`, `do`, `scode`, `tid`, `hour`) VALUES('".mysqli_real_escape_string($link, $_GET['reg'])."', '".mysqli_real_escape_string($link, $_GET['do'])."', '".mysqli_real_escape_string($link, $_GET['scode'])."', '".mysqli_real_escape_string($link, $_GET['tid'])."', '".mysqli_real_escape_string($link, $_GET['hour'])."')";
+        
+        if(mysqli_query($link, $query)) {
+            $status = 1;
         }
+        
+        echo json_encode(Array("status" => $status));
         
     }
 
