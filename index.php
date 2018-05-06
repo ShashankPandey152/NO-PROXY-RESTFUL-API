@@ -227,9 +227,9 @@ This is a system generated mail. Do not reply.
                     $temp = $slots[$j];
                     $slots[$j] = $slots[$j+1];
                     $slots[$j+1] = $temp;
-                    $temp1 = $sids[$j];
-                    $sids[$j] = $sids[$j+1];
-                    $sids[$j+1] = $temp1;
+                    $temp1 = $scodes[$j];
+                    $scodes[$j] = $scodes[$j+1];
+                    $scodes[$j+1] = $temp1;
                     $temp2 = $ids[$j];
                     $ids[$j] = $ids[$j+1];
                     $ids[$j+1] = $temp2;
