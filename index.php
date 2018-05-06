@@ -303,14 +303,14 @@ This is a system generated mail. Do not reply.
         
         $status = 0; 
         
-        $query = "SELECT `otp` FROM `student_slot` WHERE `reg` = '".mysqli_real_escape_string($link, $_GET['reg'])."' AND `scode` = '".mysqli_real_escape_string($link, $_GET['scode'])."'";
+        $query = "SELECT `otp`, `tid` FROM `student_slot` WHERE `reg` = '".mysqli_real_escape_string($link, $_GET['reg'])."' AND `scode` = '".mysqli_real_escape_string($link, $_GET['scode'])."'";
         
         $row = mysqli_fetch_array(mysqli_query($link, $query));
         
         if($row['otp'] == "") {
             $status = 2;
         } else if($_GET['otp'] == $row['otp']) {
-            $query = "INSERT INTO `attendance`(`reg`, `do`, `scode`, `tid`, `hour`) VALUES('".mysqli_real_escape_string($link, $_GET['reg'])."', '".mysqli_real_escape_string($link, $_GET['do'])."', '".mysqli_real_escape_string($link, $_GET['scode'])."', '".mysqli_real_escape_string($link, $_GET['tid'])."', '".mysqli_real_escape_string($link, $_GET['hour'])."')";
+            $query = "INSERT INTO `attendance`(`reg`, `do`, `scode`, `tid`, `hour`) VALUES('".mysqli_real_escape_string($link, $_GET['reg'])."', '".mysqli_real_escape_string($link, $_GET['do'])."', '".mysqli_real_escape_string($link, $_GET['scode'])."', '".mysqli_real_escape_string($link, $row['tid'])."', '".mysqli_real_escape_string($link, $_GET['hour'])."')";
         
             if(mysqli_query($link, $query)) {
                 $status = 1;
