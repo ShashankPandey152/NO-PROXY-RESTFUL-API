@@ -1,6 +1,6 @@
 <?php
 
-    $link = mysqli_connect("shareddb-g.hosting.stackcp.net","interconnect-3237e9c9","password98@","interconnect-3237e9c9");
+    $link = mysqli_connect("*****","*****","*****","*****");
     
     $now = date('H:i:s');
     $query = "SELECT `time`, `id` FROM `student_slot`";
